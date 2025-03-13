@@ -1,0 +1,36 @@
+const data = `city,population,area,density,country
+Shanghai,24256800,6340,3826,China
+Delhi,16787941,1484,11313,India
+Lagos,16060303,1171,13712,Nigeria
+Istanbul,14160467,5461,2593,Turkey
+Tokyo,13513734,2191,6168,Japan
+Sao Paulo,12038175,1521,7914,Brazil
+Mexico City,8874724,1486,5974,Mexico
+London,8673713,1572,5431,United Kingdom
+New York City,8537673,784,10892,United States
+Bangkok,8280925,1569,5279,Thailand`;
+
+if (data) {
+    const lines = data.split("\n").slice(1);
+    const table = lines.map(line => line.split(","))
+        .map(([city, population, area, density, country]) => ({
+            city, population, area, density: +density, country
+        }));
+
+    const maxDensity = Math.max(...table.map(row => row.density));
+
+    table.forEach(row => row.percentage = Math.round((row.density * 100) / maxDensity));
+
+    table.sort((a, b) => b.percentage - a.percentage);
+
+    table.forEach(({ city, population, area, density, country, percentage }) => {
+        console.log(
+            city.padEnd(18) +
+            population.padStart(10) +
+            area.padStart(8) +
+            density.toString().padStart(8) +
+            country.padStart(18) +
+            percentage.toString().padStart(6)
+        );
+    });
+}
